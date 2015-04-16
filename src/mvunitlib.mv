@@ -1,0 +1,119 @@
+
+
+<MvCOMMENT>
+| Utility function to convert comma separated list into array
+| 
+| @return array
+</MvCOMMENT>
+<MvFUNCTION NAME = "Unit_List" PARAMETERS = "str" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ ',' IN l.str LT 1 }">
+		<MvASSIGN NAME = "l.return" INDEX = 1 VALUE = "{ l.str }" />
+		<MvFUNCTIONRETURN VALUE = "{ l.return }" />
+	</MvIF>
+
+	<MvASSIGN NAME = "l.total" VALUE = "{ len( l.str ) - len( glosub( l.str, ',', '' ) ) + 1 }" />
+	<MvFOR INDEX = "l.pos" COUNT = "{ l.total }">
+		<MvASSIGN NAME = "l.return" INDEX = "{ l.pos }" VALUE = "{ trim(gettoken( l.str, ',', l.pos )) }" />
+	</MvFOR>
+
+	<MvFUNCTIONRETURN VALUE = "{ l.return }" />
+</MvFUNCTION>
+
+
+<MvCOMMENT>
+| Increment the assertion total
+| 
+| 
+</MvCOMMENT>
+<MvFUNCTION NAME = "Unit_Increment_Total" PARAMETERS = "" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.MvUnit:assertions LT 1 }">
+		<MvASSIGN NAME = "g.MvUnit:assertions" VALUE = 1 />
+	<MvELSE>
+		<MvASSIGN NAME = "g.MvUnit:assertions" VALUE = "{ g.MvUnit:assertions + 1 }" />
+	</MvIF>
+</MvFUNCTION>
+
+<MvCOMMENT>
+| Unit assertion fail
+| 
+| @return int 0
+</MvCOMMENT>
+<MvFUNCTION NAME = "Unit_Fail" PARAMETERS = "" STANDARDOUTPUTLEVEL = "">
+	<MvEVAL EXPR = "{ Unit_Increment_Total() }" />
+
+	<MvIF EXPR = "{ g.MvUnit:failures LT 1 }">
+		<MvASSIGN NAME = "g.MvUnit:failures" VALUE = 1 />
+	<MvELSE>
+		<MvASSIGN NAME = "g.MvUnit:failures" VALUE = "{ g.MvUnit:failures + 1 }" />
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 0 />
+</MvFUNCTION>
+
+<MvCOMMENT>
+| Unit assertion pass
+| 
+| @return 1
+</MvCOMMENT>
+<MvFUNCTION NAME = "Unit_Pass" PARAMETERS = "" STANDARDOUTPUTLEVEL = "">
+	<MvEVAL EXPR = "{ Unit_Increment_Total() }" />
+
+	<MvIF EXPR = "{ g.MvUnit:successes LT 1 }">
+		<MvASSIGN NAME = "g.MvUnit:successes" VALUE = 1 />
+	<MvELSE>
+		<MvASSIGN NAME = "g.MvUnit:successes" VALUE = "{ g.MvUnit:successes + 1 }" />
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1 />
+</MvFUNCTION>
+
+<MvCOMMENT>
+| True assertion
+| 
+| @param int val
+| @return int 1 = success
+</MvCOMMENT>
+<MvFUNCTION NAME = "Unit_Assert_True" PARAMETERS = "val" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ int(l.val) NE 1 }">
+		<MvFUNCTIONRETURN VALUE = "{ Unit_Fail() }" />
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ Unit_Pass() }" />
+</MvFUNCTION>
+
+<MvCOMMENT>
+| Assert equivalance
+| 
+| @return int 1 = success
+</MvCOMMENT>
+<MvFUNCTION NAME = "Unit_Assert_Equals" PARAMETERS = "val, equivalent" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ l.val NE l.equivalent }">
+		<MvFUNCTIONRETURN VALUE = "{ Unit_Fail() }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ Unit_Pass() }">
+</MvFUNCTION>
+
+<MvCOMMENT>
+| Format response for JSON
+| 
+| @return int
+</MvCOMMENT>
+<MvFUNCTION NAME = "Unit_Response" PARAMETERS = "" STANDARDOUTPUTLEVEL = "">
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Response_Start() }">
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Output(g.MvUnit) }">
+
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_End() }" />
+</MvFUNCTION>
+
+<MvCOMMENT>
+| Adds text to output response
+| 
+| @param string str
+</MvCOMMENT>
+<MvFUNCTION NAME = "Unit_Print" PARAMETERS = "str" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ len(g.MvUnit:output) GT 0 }">
+		<MvASSIGN NAME = "l.str" VALUE = "{ asciichar( 10 ) $ l.str }" />
+	</MvIF>
+	<MvASSIGN NAME = "g.MvUnit:output" VALUE = "{ g.MvUnit:output $ l.str }" />
+</MvFUNCTION>

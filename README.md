@@ -1,2 +1,3 @@
-# MvUnit
-MivaScript Unit Testing module for Miva Merchant.
+# MvUnit - Miva Modules Unit Testing Library/Module
+
+MivaScript Unit Testing library and module for Miva Merchant.

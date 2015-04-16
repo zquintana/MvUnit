@@ -1,0 +1,45 @@
+#mvunit_container {
+  display: table;
+  width: 100%; }
+  #mvunit_container .mvunit-middle-col {
+    width: 30%;
+    margin: 50px auto 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px; }
+  #mvunit_container .mvunit-field label {
+    display: block; }
+  #mvunit_container h2 {
+    margin-top: 0; }
+  #mvunit_container #mvunit_results {
+    margin-top: 20px; }
+  #mvunit_container .mvunit-fails, #mvunit_container .mvunit-success {
+    font-weight: bold; }
+  #mvunit_container .mvunit-fails {
+    color: red; }
+  #mvunit_container .mvunit-success {
+    color: green; }
+  #mvunit_container #mnunit_output {
+    margin-top: 20px; }
+  #mvunit_container textarea#mvunit_output_text {
+    width: 97%;
+    height: 200px;
+    border-radius: 5px;
+    padding: 5px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    outline: none; }
+
+table.mvunit-table {
+  width: 100%;
+  font-size: 14px;
+  text-align: left;
+  border-spacing: 0;
+  border-collapse: collapse; }
+  table.mvunit-table thead > tr > td, table.mvunit-table thead > tr > th, table.mvunit-table tbody > tr > td, table.mvunit-table tbody > tr > th, table.mvunit-table tfoot > tr > td, table.mvunit-table tfoot > tr > th {
+    padding: 8px;
+    border-top: 1px solid #ddd; }
+  table.mvunit-table thead > tr:nth-of-type(odd) {
+    background-color: #f9f9f9; }
+  table.mvunit-table thead > tr > th {
+    border-bottom: 2px solid #ddd; }

@@ -1,0 +1,286 @@
+<MIVA STANDARDOUTPUTLEVEL="" />
+
+
+
+<MvFUNCTION NAME = "Module_Description" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.module:code"		VALUE = "mvunit">
+	<MvASSIGN NAME = "l.module:name"		VALUE = "MvUnit">
+	<MvASSIGN NAME = "l.module:provider"	VALUE = "Miva Merchant">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "9.0000">
+	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "5.70">
+	<MvASSIGN NAME = "l.module:description"	VALUE = "Unit testing for Miva modules">
+	<MvASSIGN NAME = "l.module:features"	VALUE = "util,json,clientside">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "StoreUtilityModule_Validate" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "StoreUtilityModule_Action" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "StoreUtilityModule_Screen" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	<MvIF EXPR = "{ ISNULL g.Admin_Open_Store }">							
+		<MvFUNCTIONRETURN VALUE = 1 />	
+	</MvIF>
+	<MvIF EXPR = "{ ( NOT g.Admin_User_Administrator ) AND
+					( g.Admin_User_ID NE g.Store:manager_id ) }">			
+		<MvFUNCTIONRETURN VALUE = 1 />	
+	</MvIF>
+
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'MvUnit', '', '' ) }">
+
+
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_UI_JavaScript() }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AJAX_JavaScript() }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_Functions_JavaScript() }">
+
+	<MvCOMMENT>
+	<MvEVAL EXPR = "{ Element_ImageManagement_ImageList_CSS( l.module ) }">
+	<MvEVAL EXPR = "{ Element_ImageManagement_ImageList_JavaScript( l.module ) }">
+	</MvCOMMENT>
+	<MvEVAL EXPR = "{ Element_MvUnit_CSS( l.module ) }" />
+	<MvEVAL EXPR = "{ Element_MvUnit_JavaScript( l.module ) }" />
+
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'MvUnit', '', '' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'MVUNIT', 'MVUNIT:MvUnit' ) }">
+
+	<MvCOMMENT>
+	<script language="JavaScript">
+		MMScreen_LoadFinished( function() { new ImageManagement_ImageList(); } );
+	</script>
+	</MvCOMMENT>
+
+	<MvHIDE FIELDS = "g.Module_Code">
+
+	<MvASSIGN NAME = "l.null" VALUE = "{ Unit_Modules(l.tpl:modules) }" />
+	<MvEVAL EXPR = "{ View_Main(l.tpl) }" />
+
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( 'MVUNIT_RT:Run Test;MvUnitManager.Run_Tests( this )' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "StoreUtilityModule_LeftNavigation"  PARAMETERS = "module var, indent" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ ISNULL g.Admin_Open_Store }">							<MvFUNCTIONRETURN VALUE = 1>	</MvIF>
+	<MvIF EXPR = "{ ( NOT g.Admin_User_Administrator ) AND
+					( g.Admin_User_ID NE g.Store:manager_id ) }">			<MvFUNCTIONRETURN VALUE = 1>	</MvIF>
+	
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].LeftNavigation_Dot( l.indent - 1, 'Screen=SUTL&Store_Code=' $ encodeattribute( g.Store:code ) $ '&Module_Code=' $ encodeattribute( l.module:code ), 'Main', 'MvUnit' ) }">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "Module_JSON" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.Module_Function EQ 'MvUnit_Tests' }">
+		<MvFUNCTIONRETURN VALUE = "{ Unit_Tests() }" />
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'MvUnit_Test' }">
+		<MvFUNCTIONRETURN VALUE = "{ Module_JSON_Test() }" />
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1 />
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Clientside" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.Filename EQ 'mv-unit.js' }">						<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">	<MIVA STANDARDOUTPUTLEVEL = "text, html"><MvINCLUDE FILE = "resources/js/mv-unit.js"><MIVA STANDARDOUTPUTLEVEL = "">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'admin.css' }">						<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/css' ) }">	<MIVA STANDARDOUTPUTLEVEL = "text, html"><MvINCLUDE FILE = "resources/css/admin.css"><MIVA STANDARDOUTPUTLEVEL = "">
+	<MvELSE>
+		<MvASSIGN NAME = "l.null" VALUE = "{ miva_output_header( 'Status', '404 Not Found' ) }">
+	</MvIF>
+</MvFUNCTION>
+
+
+<MvCOMMENT>
+| Function for JSON Function MvUnitT_Test
+| 
+| @return int
+</MvCOMMENT>
+<MvFUNCTION NAME = "Module_JSON_Test" PARAMETERS = "" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.MvUnit:Test EQ 'TestTrue' }">
+		<MvFUNCTIONRETURN VALUE = "{ TestTrue() }" />
+	<MvELSEIF EXPR = "{ g.MvUnit:Test EQ 'TestEquals' }">
+		<MvFUNCTIONRETURN VALUE = "{ TestEquals() }" />
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvCOMMENT>
+| Test true
+| 
+| @return int
+</MvCOMMENT>
+<MvFUNCTION NAME = "TestTrue" PARAMETERS = "" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.test1" VALUE = "{ 1 }">
+	<MvASSIGN NAME = "l.null" VALUE = "{ Unit_Assert_True(l.test1) }">
+
+	<MvASSIGN NAME = "l.test2" VALUE = "{ 0 }">
+	<MvASSIGN NAME = "l.null" VALUE = "{ Unit_Assert_True(l.test2) }">
+
+	<MvASSIGN NAME = "l.null" VALUE = "{ Unit_Print('Value of test1: ' $ l.test1) }">
+	<MvASSIGN NAME = "l.null" VALUE = "{ Unit_Print('Value of test2: ' $ l.test1) }">
+
+	<MvFUNCTIONRETURN VALUE = "{ Unit_Response() }">
+</MvFUNCTION>
+
+<MvCOMMENT>
+| Test equals
+| 
+| @return int
+</MvCOMMENT>
+<MvFUNCTION NAME = "TestEquals" PARAMETERS = "" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.test1" VALUE = "{ 10 }">
+	<MvASSIGN NAME = "l.null" VALUE = "{ Unit_Assert_Equals(l.test1, 10) }">
+	<MvASSIGN NAME = "l.null" VALUE = "{ Unit_Assert_Equals(l.test1, 11) }">
+	<MvASSIGN NAME = "l.null" VALUE = "{ Unit_Print('Value of test1: ' $ l.test1) }">
+
+	<MvFUNCTIONRETURN VALUE = "{ Unit_Response() }">
+</MvFUNCTION>
+
+<MvCOMMENT>
+| Example function for adding multiple test units by name
+| 
+| @return array of named tests
+</MvCOMMENT>
+<MvFUNCTION NAME = "Unit_Tests" STANDARDOUTPUTLEVEL = "text,html,compresswhitespace">
+	<MvASSIGN NAME = "l.tests" VALUE = "{ Unit_List('TestTrue,TestEquals') }">
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Response_Start() }">
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Output(l.tests) }">
+
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_End() }" />
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Unit_Modules" PARAMETERS = "modules var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "g.MvUnit:Total" VALUE = "{ Json_ModuleList( g.MvUnit:Modules ) }" />
+	<MvASSIGN NAME = "l.modules" VALUE = "{ g.MvUnit:Modules }">
+</MvFUNCTION>
+
+<MvCOMMENT>
+| CSS include helper
+| 
+|
+</MvCOMMENT>
+<MvFUNCTION NAME = "Element_MvUnit_CSS" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text,html,compresswhitespace">
+	<link type="text/stylesheet" href="{ g.clientside_url $ 'Module_Code=' $ encodeattribute( l.module:code ) $ '&Filename=admin.css' }" rel="stylesheet" />
+</MvFUNCTION>
+
+<MvCOMMENT>
+| Javascript include helper
+| 
+|
+</MvCOMMENT>
+<MvFUNCTION NAME = "Element_MvUnit_JavaScript" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text,html,compresswhitespace">
+	<script type="text/javascript" src="{ g.clientside_url $ 'Module_Code=' $ encodeattribute( l.module:code ) $ '&Filename=mv-unit.js' }"></script>
+</MvFUNCTION>
+
+<MvCOMMENT>
+| For outputting preformatted text to the browser
+| 
+| @param string string
+</MvCOMMENT>
+<MvFUNCTION NAME = "Print" PARAMETERS = "string" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	<pre><MvEVAL EXPR = "{ 'MvUnit: ' $ l.string }"></pre>
+</MvFUNCTION>
+
+
+<MvCOMMENT>
+| Main view template
+| 
+| @param struct ref tpl_vars
+</MvCOMMENT>
+<MvFUNCTION NAME = "View_Main" PARAMETERS = "tpl_vars var" STANDARDOUTPUTLEVEL = "text,html,compresswhitespace">
+	<div class="mvunit-row" id="mvunit_container">
+		<div class="mvunit-middle-col">
+			<h2>MvUnit Tests</h2>
+
+			<div class="mvunit-field">
+				<label>Module</label>
+				<select id="mv_unit_test_modules">
+					<option> -- Select One -- </option>
+					<MvFOREACH ITERATOR = "l.module" ARRAY = "l.tpl_vars:modules">
+						<option value="{ l.module:code }"><MvEVAL EXPR = "{ l.module:name }" /></option>
+					</MvFOREACH>
+				</select>
+			</div>
+
+			<div id="mvunit_results">
+				<h2>Results</h2>
+				<table class="mvunit-table" id="mvunit_result_table">
+					<thead>
+						<tr>
+							<th>Test Name</th>
+							<th>Assertions</th>
+							<th>Result</th>
+							<th>Time</th>
+						</tr>
+					</thead>
+					<tbody id="mvunit_result_table_results">
+					</tbody>
+					<tfoot id="mvunit_result_table_foot">
+					</tfoot>
+				</table>
+			</div>
+
+			<div id="mnunit_output">
+				<h2>Output</h2>
+				<textarea id="mvunit_output_text" readonly="readonly"></textarea>
+			</div>
+		</div>
+	</div>
+</MvFUNCTION>
+
+
+<MvCOMMENT>
+| Read module row from DB
+| 
+| @param struct ref module
+</MvCOMMENT>
+<MvFUNCTION NAME = "Module_Read" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.module:id" 			VALUE = "{ Modules.d.id }" />
+	<MvASSIGN NAME = "l.module:code" 		VALUE = "{ Modules.d.code }" />
+	<MvASSIGN NAME = "l.module:name" 		VALUE = "{ Modules.d.name }" />
+	<MvASSIGN NAME = "l.module:provider" 	VALUE = "{ Modules.d.provider }" />
+	<MvASSIGN NAME = "l.module:api_ver" 	VALUE = "{ Modules.d.api_ver }" />
+	<MvASSIGN NAME = "l.module:version" 	VALUE = "{ Modules.d.version }" />
+	<MvASSIGN NAME = "l.module:module" 		VALUE = "{ Modules.d.module }" />
+	<MvASSIGN NAME = "l.module:refcount" 	VALUE = "{ Modules.d.refcount }" />
+	<MvASSIGN NAME = "l.module:active" 		VALUE = "{ Modules.d.active }" />
+</MvFUNCTION>
+
+<MvCOMMENT>
+| Get module list
+| 
+| @param struct ref modules
+| @return int total records
+</MvCOMMENT>
+<MvFUNCTION NAME = "Json_ModuleList" PARAMETERS = "modules var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.sql" VALUE = "{ 
+		'SELECT m.* FROM Modules AS m ' $
+		'WHERE m.id IN (SELECT mf.module_id FROM ModuleXFeature AS mf WHERE mf.feature = \'json\')' 
+	}" />
+	<MvOPENVIEW NAME	= "Merchant"
+					VIEW 	= "Modules"
+					QUERY 	= "{ l.sql }" />
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MVUNIT-00001', g.MvOPENVIEW_Error ) }">
+	</MvIF>		
+
+	<MvASSIGN NAME = "l.count" VALUE = 0>		
+	<MvWHILE EXPR = "{ NOT Modules.d.EOF }">
+		<MvASSIGN NAME = "l.count" VALUE = "{ l.count + 1 }">
+		<MvEVAL EXPR = "{ Module_Read(l.modules[l.count]) }">		
+		<MvSKIP NAME = "Merchant" VIEW = "Modules" ROWS = 1>
+	</MvWHILE>		
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "Modules">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'MVUNIT-00002', l.count ) }">	
+</MvFUNCTION>
+
+
+<MvINCLUDE FILE = "src/mvunitlib.mv">
