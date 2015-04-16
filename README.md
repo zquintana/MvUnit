@@ -23,9 +23,10 @@ A detailed view of how this works can be found in the `mvunit.mv` file.
 
 ### Example Implementation
 
-The following is taken from the `mvunit.mv` module file.
+The following is taken from the `mvunit.mv` module file, assume that mvunitlib.mv has already been included in the file.
 
 ~~~xml
+... 
 <MvFUNCTION NAME = "Module_JSON" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
 	<MvIF EXPR = "{ g.Module_Function EQ 'MvUnit_Tests' }">
 		<MvFUNCTIONRETURN VALUE = "{ Unit_Tests() }" />
