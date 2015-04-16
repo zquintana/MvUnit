@@ -23,7 +23,7 @@ A detailed view of how this works can be found in the `mvunit.mv` file.
 
 ### Example Implementation
 
-The following is taken from the `mvunit.mv` module file, assume that mvunitlib.mv has already been included in the file.
+The following is taken from the `mvunit.mv` module file. Assume that mvunitlib.mv has already been included in the file.
 
 ~~~xml
 ... 
