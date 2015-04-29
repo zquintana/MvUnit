@@ -294,6 +294,9 @@ class MvUnit
 	 * @return null
 	###
 	handleTestResponse: (response) ->
+		if response.success == 0
+			return @handleError(response)
+
 		@currentData = data = response.data
 		data.executionTime = @now() - @startTime
 		@outputResult(data, @getResultsBody())
@@ -309,7 +312,8 @@ class MvUnit
 		@outputResult(@totals, @getResultsFoot(), 'mvunit_result_table_results_total')
 		@renderFoot()
 
-
+	handleError: (response) ->
+		alert "#{response.error_code}: #{response.error_message}"
 
 	###*
 	 * Handles response from load

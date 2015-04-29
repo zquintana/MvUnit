@@ -360,6 +360,9 @@
 
     MvUnit.prototype.handleTestResponse = function(response) {
       var data;
+      if (response.success === 0) {
+        return this.handleError(response);
+      }
       this.currentData = data = response.data;
       data.executionTime = this.now() - this.startTime;
       this.outputResult(data, this.getResultsBody());
@@ -372,6 +375,10 @@
       this.currentData = this.totals;
       this.outputResult(this.totals, this.getResultsFoot(), 'mvunit_result_table_results_total');
       return this.renderFoot();
+    };
+
+    MvUnit.prototype.handleError = function(response) {
+      return alert("" + response.error_code + ": " + response.error_message);
     };
 
 

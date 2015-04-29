@@ -1,5 +1,5 @@
 MODULE_CODE = "mvunit"
-VERSION = "5.000"
+VERSION = "5.001"
 MVS = FileList["src/mvunit.mv"]
 CWD = Dir.pwd
 
